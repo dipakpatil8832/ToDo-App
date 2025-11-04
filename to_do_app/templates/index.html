@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>To-Do List Manager</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="bg-dark text-white">
+<div class="container mt-5">
+    <h2 class="text-center mb-4">✅ To-Do List Manager</h2>
+     <a href="/add" class="btn btn-success mb-3">➕ Add Task</a>
+ <form class="d-flex mb-3" method="GET" action="/search" style="max-width: 300px;">
+    <input class="form-control me-2" type="search" name="q"
+           placeholder="Search tasks..." value="{{ search_query | default('') }}">
+    <button class="btn btn-info" type="submit">🔍</button>
+</form>
+
+
+    <table class="table table-bordered table-striped table-dark text-center">
+        <thead>
+        <tr>
+            <th>#</th><th>Description</th><th>Due Date</th><th>Status</th><th>Actions</th>
+        </tr>
+        </thead>
+        {% if tasks|length == 0 %}
+<tr>
+    <td colspan="5" class="text-center text-warning">
+        ⚠ No matching tasks found!
+    </td>
+</tr>
+{% endif %}
+
+        <tbody>
+        {% for task in tasks %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ task.description }}</td>
+            <td>{{ task.due_date }}</td>
+            <td>
+                {% if task.status == "Completed" %}
+                ✅ Completed
+                {% else %}
+                🕒 Pending
+                {% endif %}
+            </td>
+            <td>
+                {% if task.status != "Completed" %}
+                <a href="/complete/{{ loop.index0 }}" class="btn btn-sm btn-primary">✔ Complete</a>
+                {% endif %}
+                <a href="/edit/{{ loop.index0 }}" class="btn btn-sm btn-warning">✏ Edit</a>
+                <a href="/delete/{{ loop.index0 }}" class="btn btn-sm btn-danger">🗑 Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
